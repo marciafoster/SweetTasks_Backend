@@ -1,6 +1,17 @@
 const express = require('express')
 const tasks = express.Router()
-const {getAllTasks, getOneTask, createTask, deleteTask, updateTask} = require("../queries/task.js")
+const { getAllTasks, 
+        getOneTask, 
+        createTask, 
+        deleteTask, 
+        updateTask } = require("../queries/task.js")
+const { checkName,
+        checkDescription,
+        checkAssignedTo,
+        checkDueDate,
+        checkBoolean,
+        checkPriority,
+        checkNotes } = require("../validations/checkTasks")
 
 
 tasks.get("/", async (req, res) => {
@@ -22,7 +33,7 @@ tasks.get("/:id", async (req, res) => {
     }
 })
 
-tasks.post ('/',  async (req, res) => {
+tasks.post ('/', checkName, checkDescription, checkAssignedTo, checkDueDate, checkBoolean, checkPriority, checkNotes, async (req, res) => {
     const body = req.body
     const task = await createTask(body)
     res.status(200).json(task)
@@ -38,7 +49,7 @@ tasks.delete('/:id', async (req, res) => {
     }
 })
 
-tasks.put('/:id', async (req, res) => {
+tasks.put('/:id', checkName, checkDescription, checkAssignedTo, checkDueDate, checkBoolean, checkPriority, checkNotes, async (req, res) => {
     const { id } = req.params
     const body = req.body
     const updatedTask = await updateTask(id, body)
@@ -53,4 +64,3 @@ tasks.put('/:id', async (req, res) => {
 
 module.exports = tasks
 
-// checkName, checkDescription, checkAssignedTo, checkDueDate, checkBoolean, checkPriority,
