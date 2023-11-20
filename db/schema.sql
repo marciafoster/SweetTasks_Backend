@@ -1,5 +1,5 @@
 drop database if exists tasks_dev;
-CREATe DATABASE tasks_dev;
+CREATE DATABASE tasks_dev;
 
 
 \c tasks_dev;
@@ -12,4 +12,5 @@ CREATE TABLE tasks (
     assigned_to VARCHAR,
     due_date DATE,
     is_complete BOOLEAN,
-    priority INTEGER);
+    priority INTEGER,
+    notes TEXT);

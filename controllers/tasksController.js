@@ -1,6 +1,6 @@
 const express = require('express')
 const tasks = express.Router()
-const {getAllTasks} = require("../queries/task.js")
+const {getAllTasks, getOneTask, createTask} = require("../queries/task.js")
 
 
 tasks.get("/", async (req, res) => {
@@ -12,6 +12,24 @@ tasks.get("/", async (req, res) => {
     }
 })
 
+tasks.get("/:id", async (req, res) => {
+    const id = req.params.id
+    const oneTask = await getOneTask(id)
+    if(oneTask){
+    res.status(200).json(oneTask)
+    } else {
+        res.status(500).json({error: "Task Not found"})
+    }
+})
+
+tasks.post ('/',  async (req, res) => {
+    const body = req.body
+    const task = await createTask(body)
+    res.status(200).json(task)
+} )
+
 
 
 module.exports = tasks
+
+// checkName, checkDescription, checkAssignedTo, checkDueDate, checkBoolean, checkPriority,
