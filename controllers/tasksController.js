@@ -1,6 +1,6 @@
 const express = require('express')
 const tasks = express.Router()
-const {getAllTasks, getOneTask, createTask} = require("../queries/task.js")
+const {getAllTasks, getOneTask, createTask, deleteTask} = require("../queries/task.js")
 
 
 tasks.get("/", async (req, res) => {
@@ -26,7 +26,17 @@ tasks.post ('/',  async (req, res) => {
     const body = req.body
     const task = await createTask(body)
     res.status(200).json(task)
-} )
+})
+
+tasks.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    const deletedTask = await deleteTask(id)
+    if(deletedTask.id){
+        res.status(200).json(deletedTask)
+    } else {
+        res.status(404).json({error: "Task Not Found"})
+    }
+})
 
 
 

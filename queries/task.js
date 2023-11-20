@@ -21,8 +21,8 @@ const getOneTask = async (id) => {
 
 const createTask = async (task) => {
     try {
-        const newTask = await db.one("INSERT INTO tasks (task_name, description, assigned_to, due_date, is_complete, priority) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-        [task.task_name, task.description, task.assigned_to, task.due_date, task.is_complete, task.priority ]
+        const newTask = await db.one("INSERT INTO tasks (task_name, description, assigned_to, due_date, is_complete, priority, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+        [task.task_name, task.description, task.assigned_to, task.due_date, task.is_complete, task.priority, task.notes ]
         )
         return newTask
         
@@ -31,8 +31,18 @@ const createTask = async (task) => {
     }
 }
 
+const deleteTask = async (id) => {
+    try {
+        const deletedTask = await db.one("DELETE FROM tasks WHERE id=$1 RETURNING *", id)
+        return deletedTask
+    } catch (error) {
+        return error
+    }
+}
+
 module.exports = {
     getAllTasks,
     getOneTask,
-    createTask
+    createTask, 
+    deleteTask
 }
